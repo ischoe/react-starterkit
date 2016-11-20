@@ -2,6 +2,30 @@ import test from 'tape';
 import jsdom from 'jsdom';
 import fs from 'fs';
 
+const before = test;
+const after = test;
+
+const setup = () => {
+  const fixtures = {};
+
+  // Insert your fixture code here.
+  // Make sure you're creating fresh objects each
+  // time setup() is called.
+  return fixtures;
+};
+
+const teardown = (fixtures) => {
+  // Dispose of your fixtures here.
+};
+
+before('before', function (assert) {
+
+  assert.pass('Do something before tests here');
+
+  assert.end();
+});
+
+
 test('A passing test', (assert) => {
 
   assert.pass('This test will pass.');
@@ -28,4 +52,12 @@ test('jsdom can be used', (assert) => {
       window.close();
   });
 
+});
+
+
+after('after', (assert) => {
+
+  assert.pass('Do something after tests here.');
+
+  assert.end();
 });
