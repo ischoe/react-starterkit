@@ -5,7 +5,7 @@
   "description": "JavaScript development environment starterkit",
   "scripts": {
     "prestart": "babel-node buildScripts/startMessage.js",
-    "start": "npm-run-all --parallel security-check open:src lint:watch test:watch",
+    "start": "npm-run-all --parallel security-check open:src lint:watch test:watch start-mockapi",
     "open:src": "babel-node buildScripts/srcServer.js",
     "security-check": "nsp check",
     "localtunnel": "lt --port 3000",
@@ -13,7 +13,10 @@
     "lint": "esw webpack.config.*, src, buildScripts --color",
     "lint:watch": "npm run lint -- --watch",
     "test": "tape -r babel-register src/**/*.test.js | faucet",
-    "test:watch": "tape-watch -r babel-register src/**/*.test.js | faucet"
+    "test:watch": "tape-watch -r babel-register src/**/*.test.js | faucet",
+    "generate-mock-data" : "babel-node buildScripts/generateMockData",
+    "prestart-mockapi" : "npm run generate-mock-data",
+    "start-mockapi" : "json-server --watch src/api/db.json --port 3001"
   },
   "dependencies": {
     "whatwg-fetch": "1.0.0"

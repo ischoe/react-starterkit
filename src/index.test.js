@@ -18,19 +18,16 @@ const teardown = (fixtures) => {
   // Dispose of your fixtures here.
 };
 
-before('before', function (assert) {
+test('A test with fixtures', (assert) => {
+  const fixture = setup();
 
-  assert.pass('Do something before tests here');
+  assert.equal(typeof fixture, 'object',
+    'fixture should return an object');
 
+  teardown(fixture);
   assert.end();
 });
 
-
-test('A passing test', (assert) => {
-
-  assert.pass('This test will pass.');
-  assert.end();
-});
 
 test('Assertions with tape.', (assert) => {
   const expected = 'something to test';
@@ -41,7 +38,7 @@ test('Assertions with tape.', (assert) => {
   assert.end();
 });
 
-test('jsdom can be used', (assert) => {
+test('hello world correctly displayed', (assert) => {
   const index = fs.readFileSync('./src/index.html', 'utf-8');
   const expected = 'HELLO WORLD !';
 
@@ -51,13 +48,4 @@ test('jsdom can be used', (assert) => {
       assert.end();
       window.close();
   });
-
-});
-
-
-after('after', (assert) => {
-
-  assert.pass('Do something after tests here.');
-
-  assert.end();
 });
