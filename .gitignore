@@ -1,8 +1,9 @@
 # Secret files
 config.js
 
-# don't stage prod generated files
+# don't stage generated files
 prod
+src/api/db.json
 
 # Logs
 logs
