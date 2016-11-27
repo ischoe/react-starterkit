@@ -1,3 +1,9 @@
+# Secret files
+config.js
+
+# don't stage prod generated files
+prod
+
 # Logs
 logs
 *.log
