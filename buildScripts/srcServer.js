@@ -2,30 +2,22 @@ import express from 'express';
 import path from 'path';
 import open from 'open';
 import webpack from 'webpack';
-import config from '../webpack.config.dev.js';
+import webpackConfig from '../webpack.config.dev.js';
+import config from '../config';
 
 /*eslint-disable no-console*/
 
-const port = 3000,
+const port = config.port,
 	app = express(),
-	compiler = webpack(config);
+	compiler = webpack(webpackConfig);
 
 app.use(require('webpack-dev-middleware')(compiler, {
 	noInfo: true,
-	publicPath: config.output.publicPath
+	publicPath: webpackConfig.output.publicPath
 }));
 
 app.get('/', function(req, res) {
 		res.sendFile(path.join(__dirname, '../src/index.html'));
-});
-
-app.get('/users', function(req, res) {
-		// demo call, can be replaced with real database calls
-		res.json([
-			{"id" : 1, "firstName" : "Bob", "lastName" : "Smith", "email" : "bob@gmx.com"},
-			{"id" : 2, "firstName" : "Ben", "lastName" : "Smooth", "email" : "ben@gmx.com"},
-			{"id" : 2, "firstName" : "Benjamin", "lastName" : "Smatch", "email" : "benjamin@gmx.com"}
-		]);
 });
 
 app.listen(port, function(err) {
