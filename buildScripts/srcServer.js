@@ -1,12 +1,25 @@
-import express from 'express';
-import path from 'path';
-import open from 'open';
+//import express from 'express';
+//import path from 'path';
+//import open from 'open';
 import webpack from 'webpack';
 import webpackConfig from '../webpack.config.dev.js';
 import config from '../config';
 
 /*eslint-disable no-console*/
+var WebpackDevServer = require('webpack-dev-server');
 
+new WebpackDevServer(webpack(webpackConfig), {
+  publicPath: webpackConfig.output.publicPath,
+  hot: true,
+  historyApiFallback: true
+}).listen(config.port, 'localhost', function (err) {
+  if (err) {
+    return console.log('Error : ', err);
+  }
+
+  console.log('Listening at http://localhost:'+config.port+'/');
+});
+/*
 const port = config.port,
 	app = express(),
 	compiler = webpack(webpackConfig);
@@ -27,3 +40,4 @@ app.listen(port, function(err) {
 		open('http://localhost:' + port);
 	}
 });
+*/

@@ -5,20 +5,24 @@ import WebpackMd5Hash from 'webpack-md5-hash';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 export default {
-  debug: true,
-  devtool: 'source-map',
-  noInfo: false,
   entry: {
     vendor: path.resolve(__dirname, 'src/vendor'),
     main: path.resolve(__dirname, 'src/index')
   },
-  target: 'web',
   output: {
     path: path.resolve(__dirname, 'prod'),
     publicPath: '/',
     filename: '[name].[chunkhash].js'
   },
   plugins: [
+    new webpack.LoaderOptionsPlugin({
+      options: {
+        debug: true,
+        devtool: 'source-map',
+        noInfo: false,
+        target: 'web'
+      }
+    }),
     new ExtractTextPlugin('[name].[contenthash].css'),
     new WebpackMd5Hash(),
     new webpack.optimize.CommonsChunkPlugin({
@@ -40,13 +44,27 @@ export default {
       },
       inject : true
     }),
-    new webpack.optimize.UglifyJsPlugin(),
-    new webpack.optimize.DedupePlugin()
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('production')
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin()
   ],
   module: {
-    loaders: [
-      {test: /\.js$/, exclude: /node_modules/, loaders: ['babel']},
-      {test: /\.css$/, loader: ExtractTextPlugin.extract('css?sourceMap')}
+    rules: [
+      {
+        test: /\.css$/,
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: "css-loader"
+        })
+      },
+      {test: /\.js$/, exclude: /node_modules/, use: ['babel-loader']},
+      {
+        test: /\.svg/,
+        use: 'file-loader?name=[name].[ext]'
+      }
     ]
   }
 }

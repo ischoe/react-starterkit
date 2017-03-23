@@ -1,14 +1,18 @@
 import path from 'path';
+import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
-
 export default {
-  debug: true,
   devtool: 'inline-source-map',
-  noInfo: false,
-  entry: [
-    path.resolve(__dirname, 'src/index')
-  ],
+  entry: {
+    'app': [
+      'babel-polyfill',
+      'react-hot-loader/patch',
+      'webpack-dev-server/client?http://localhost:3000',
+      'webpack/hot/dev-server',
+      path.resolve(__dirname, 'src')
+    ]
+  },
   target: 'web',
   output: {
     path: path.resolve(__dirname, 'src'),
@@ -19,12 +23,25 @@ export default {
     new HtmlWebpackPlugin({
       template : 'src/index.html',
       inject : true
-    })
+    }),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin()
   ],
+  devServer: {
+    hot: true,
+    contentBase: path.resolve(__dirname, 'src')
+  },
   module: {
-    loaders: [
-      {test: /\.js$/, exclude: /node_modules/, loaders: ['babel']},
-      {test: /\.css$/, loaders: ['style','css']}
+    rules: [
+      {
+        test: /\.css$/,
+        use: [ 'style-loader', 'css-loader' ]
+      },
+      {test: /\.js$/, exclude: /node_modules/, use: ['babel-loader']},
+      {
+        test: /\.svg/,
+        use: 'file-loader?name=[name].[ext]'
+      }
     ]
   }
 }
